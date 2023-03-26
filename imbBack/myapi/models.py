@@ -23,7 +23,7 @@ class Product(models.Model):
         AGILE = 'Agile'
         WATERFALL = 'Waterfall'
     
-    productId = models.IntegerField(primary_key=True)
+    productId = models.AutoField(primary_key=True)
     productName = models.CharField(max_length=100)
     scrumMaster = models.ForeignKey(ScrumMaster, on_delete= models.CASCADE)
     productOwner = models.CharField(max_length=100)
