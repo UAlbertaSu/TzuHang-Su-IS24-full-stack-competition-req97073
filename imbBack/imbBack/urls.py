@@ -19,9 +19,9 @@ from rest_framework import routers
 from myapi import views
 
 router = routers.DefaultRouter()
+
 router.register(r'product', views.ProductViewSet)
-router.register(r'developer', views.DeveloperViewSet)
-router.register(r'scrummaster', views.ScrumMasterViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
