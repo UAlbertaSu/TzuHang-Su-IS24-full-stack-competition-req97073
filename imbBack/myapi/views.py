@@ -11,6 +11,7 @@ from .models import Product
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = UpdateProductSerializer(instance, data=request.data, partial=True)
