@@ -18,9 +18,9 @@ from django.urls import include, path
 from rest_framework import routers 
 from myapi import views
 
-router = routers.DefaultRouter()
 
-router.register(r'product', views.ProductViewSet)
+router = routers.DefaultRouter()
+router.register(r'product', views.ProductViewSet, basename = 'product')
 
 
 urlpatterns = [

@@ -1,0 +1,33 @@
+[
+    {
+        "productId": 1,
+        "productName": "Product 1",
+        "productOwnerName": "Owner 1",
+        "Developers": [
+            "Developer 1",
+            "Developer 2",
+            "Developer 3",
+            "Developer 4",
+            "Developer 5"
+        ],
+        "scrumMasterName": "Scrum Master 1",
+        "startDate": "2023/03/27",
+        "methodology": "Waterfall"
+    },
+
+    {
+        "productId": 2,
+        "productName": "Product 2",
+        "productOwnerName": "Owner 2",
+        "Developers": [
+            "Developer 1",
+            "Developer 6",
+            "Developer 7",
+            "Developer 8",
+            "Developer 9"
+        ],
+        "scrumMasterName": "Scrum Master 1",
+        "startDate": "2022/03/27",
+        "methodology": "Waterfall"
+    }
+]
