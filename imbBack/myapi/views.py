@@ -19,9 +19,17 @@ class ProductViewSet(viewsets.ViewSet):
         # no error checking yet. 
         with open('data.json', "r") as f:
             
+            listofID=[]
             data = json.load(f)
-            
+            for i in range(len(data)):
+                listofID.append(data[i]["productId"])
+            # check if product ID already exists
+            if request.data["productId"] in listofID:
+                return Response("Error: Product ID already exists",
+                        status = status.HTTP_400_BAD_REQUEST)
+            # make new data the request 
             newData = request.data
+            #append new data into data list 
             data.append(newData)
         with open('data.json', "w") as writeF:
             json.dump(data,writeF)
@@ -29,7 +37,7 @@ class ProductViewSet(viewsets.ViewSet):
         return Response(data, status = status.HTTP_200_OK)
         
                
-    # list all active products
+    # list all products
     def list(self, request):
         
         with open('data.json') as f:
@@ -40,26 +48,30 @@ class ProductViewSet(viewsets.ViewSet):
     
     # get a specific product by productId, or by developer or Scrum Master
     def retrieve(self, request, pk):
+        #saves all the products that match the query
         productList = []
         with open('data.json') as f:
             reqData = json.load(f)
-            print(type(pk))
-            if type(pk) == str:
-                query = pk
-                for i in range(len(reqData)):
-                    if query in str(reqData[i]["productId"]):
-                        productList.append(reqData[i])
-                        break
-                    if query in reqData[i]["Developers"]:
-                        productList.append(reqData[i])
-                    if query in reqData[i]["scrumMasterName"]:
-                        productList.append(reqData[i])
-                if productList:    
-                    return Response(productList, status = status.HTTP_200_OK)
-                elif not productList:
-                
-                    return Response("Error: No such entries exist",
-                        status = status.HTTP_404_NOT_FOUND)
+            #save the query
+            query = pk
+            # check if query is a productID 
+            for i in range(len(reqData)):
+                if query in str(reqData[i]["productId"]):
+                    productList.append(reqData[i])
+                    #if match, break and return the product
+                    break
+                # if query wants to search by developer or scrum master
+                if query in reqData[i]["Developers"]:
+                    productList.append(reqData[i])
+                if query in reqData[i]["scrumMasterName"]:
+                    productList.append(reqData[i])
+            if productList:    
+                return Response(productList, status = status.HTTP_200_OK)
+            # no matches
+            elif not productList:
+            
+                return Response("Error: No such entries exist",
+                    status = status.HTTP_404_NOT_FOUND)
         f.close()   
         return Response("No Such entries Exist",
                         status = status.HTTP_404_NOT_FOUND)
@@ -73,11 +85,14 @@ class ProductViewSet(viewsets.ViewSet):
             data = json.load(f)
             productId = int(pk)
             listofIds = []
+            # get all the product IDs
             for j in range(len(data)):
                 listofIds.append(data[j]["productId"])
-            for i in range(len(data)):
-                if request.data["productId"] in listofIds:
+            # check if product ID already exists
+            if request.data["productId"] in listofIds:
                     return Response("Error: Product ID already exists", status = status.HTTP_400_BAD_REQUEST)
+            # else find the right product ID and update it
+            for i in range(len(data)):
                 if data[i]["productId"] == productId:
                     if request.data["startDate"] != data[i]["startDate"]:
                         f.close()
@@ -89,12 +104,16 @@ class ProductViewSet(viewsets.ViewSet):
                             json.dump(data, writeF)
                             f.close()
                             return Response(data[i], status = status.HTTP_200_OK)
-             
+    # delete a product
     def destroy(self, request, pk):
         with open('data.json', "r+") as f:
             data = json.load(f)
-            productId = int(pk)
+            try:
+                productId = int(pk)
+            except ValueError:
+                return Response("Error: Only delete product based on product numbers.", status = status.HTTP_400_BAD_REQUEST)
             listofIds = []
+            # check if product exists
             for j in range(len(data)):
                 listofIds.append(data[j]["productId"])
             for i in range(len(data)):
@@ -107,4 +126,5 @@ class ProductViewSet(viewsets.ViewSet):
                         json.dump(data, writeF)
                         f.close()
                         return Response("Product Deleted", status = status.HTTP_200_OK)
+        return Response("Error: Bad Request", status = status.HTTP_400_BAD_REQUEST)
   
