@@ -66,7 +66,7 @@ class ProductViewSet(viewsets.ViewSet):
                     return Response(productList, status = status.HTTP_200_OK)
                 
                 # if query wants to search by developer or scrum master
-                elif query == reqData[i]["Developers"]:
+                elif query in reqData[i]["Developers"]:
                     productList.append(reqData[i])
                 elif query == reqData[i]["scrumMasterName"]:
                     productList.append(reqData[i])
@@ -89,6 +89,8 @@ class ProductViewSet(viewsets.ViewSet):
         
         with open('data.json', "r+") as f:
             data = json.load(f)
+            if type(pk) != int:
+                return Response("Error: Only update product based on product numbers.", status = status.HTTP_400_BAD_REQUEST)
             productId = int(pk)
             listofIds = []
             # get all the product IDs

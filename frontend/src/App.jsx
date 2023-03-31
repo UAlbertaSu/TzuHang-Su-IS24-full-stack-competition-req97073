@@ -1,60 +1,104 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 
+
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css'
 import ProductTable from './components/ProductTable.jsx'
 
 const API_URL = 'http://localhost:8000/api/';
 
-const productData1 = {
-  "productId": 2,
-  "productName": "Product2",
-  "productOwnerName": "Owner2",
-  "Developers": [
-      "Developer_1",
-      "Developer_6",
-      "Developer_7",
-      "Developer_8",
-      "Developer_9",
-      "Developer_10"
-  ],
-  "scrumMasterName": "Scrum_Master_1",
-  "startDate": "2022/03/27",
-  "methodology": "Waterfall"
-}
-
 function App() {
 
   const [productData, setProductData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
   
-  async function searchProducts(){
+
+  async function initalsearchProducts(){
     const response = await fetch(`${API_URL}product/`);
     const data = await response.json();
 
-    setProductData(productData1);
-    console.log(productData1);
+    setProductData(data)
+
+  }
+  async function searchProducts(id){
+
+   
+      const response = await fetch(`${API_URL}product/${id}/`);
+      if (response.status === 404 || response.status === 400){
+        setProductData([]);
+      }
+      else{
+        const data = await response.json();
+        setProductData(data);  
+      }    
+  }
+
+  function deleteHandler(id){
+    fetch(`${API_URL}product/${id}/`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      initalsearchProducts('');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  function editHandler(id){
+    fetch('${API_URL}product/${id}/', {
+      method: 'PUT',
+    });
   }
   
   useEffect(() =>{
-    searchProducts();
+    initalsearchProducts('');
+
   },[] )
+
+  if(typeof(productData)==='undefined'){
+    return <h1>Loading...</h1>
+  }
+
   return (
     <div>
       <h1>Active Products!</h1>
       <input 
         placeholder = "Search for a product, developer or scrum master!"
-        value =""
-        onChange = {() => {}}
+        value ={searchTerm}
+        onChange = {(e) => setSearchTerm(e.target.value)}
       />
       <button 
         type="button" 
         className="btn btn-primary btn-sm" 
-        onClick ={() => {}}
+        onClick ={() => searchProducts(searchTerm)}
         >
           Search
         </button>
-        <ProductTable productData1= {productData1} />
+        <button type="button" class="btn btn-danger btn-sm"
+        onClick ={() => {deleteHandler(searchTerm)}}
+        >
+          delete
+        </button>
+        <button type="button" class="btn btn-warning btn-sm" 
+          onClick={() => {editHandler(searchTerm)}}
+        >
+          Edit
+        </button>
+        {productData.length > 0 
+          ? (
+            <div>
+              {productData.map((product) => (
+                <ProductTable product = {product} key = {[product.productId]}/>
+              ))}
+            </div>
+        ) : (
+          <div>No Products Found</div> )
+        }
     </div>
   )
 }
