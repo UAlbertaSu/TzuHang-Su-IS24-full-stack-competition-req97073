@@ -60,7 +60,7 @@ class ProductViewSet(viewsets.ViewSet):
             for i in range(len(reqData)):
                 
                 if query == str(reqData[i]["productId"]):
-                    print(i)
+                    
                     productList.append(reqData[i])
                     #if match, break and return the product
                     return Response(productList, status = status.HTTP_200_OK)
@@ -96,7 +96,7 @@ class ProductViewSet(viewsets.ViewSet):
             for j in range(len(data)):
                 listofIds.append(data[j]["productId"])
             # check if product ID already exists
-            if request.data["productId"] in listofIds:
+            if (request.data["productId"] in listofIds and request.data["productId"] != productId):
                     return Response("Error: Product ID already exists", status = status.HTTP_400_BAD_REQUEST)
             # else find the right product ID and update it
             for i in range(len(data)):
@@ -105,6 +105,7 @@ class ProductViewSet(viewsets.ViewSet):
                         f.close()
                         return Response("Error: You cannot change the start date of a project", status = status.HTTP_400_BAD_REQUEST)
                     else:
+                        print("here")
                         f.close()
                         data[i] = request.data
                         with open('data.json', "w") as writeF:        
@@ -132,6 +133,6 @@ class ProductViewSet(viewsets.ViewSet):
                     with open('data.json', "w") as writeF:        
                         json.dump(data, writeF)
                         f.close()
-                        return Response("Product Deleted", status = status.HTTP_200_OK)
+                        return Response(data, status = status.HTTP_200_OK)
         return Response("Error: Bad Request", status = status.HTTP_400_BAD_REQUEST)
   

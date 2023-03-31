@@ -1,9 +1,8 @@
 import React from 'react';
-import Table from 'react-bootstrap/Table';
+
 import EditProduct from './EditProduct.jsx';
 
-import Modal from './EditProduct.jsx'
-
+// product table component
 function ProductTable({ productData }){
  
     
@@ -32,8 +31,12 @@ function ProductTable({ productData }){
                 <td>{product.scrumMasterName}</td>
                 <td>{product.startDate}</td>
                 <td>{product.methodology}</td>
-                <td><EditProduct props = {product}/></td>
-                </tr>
+                <td>
+                    <div>
+                    <EditProduct props = {product}/>
+                    </div>
+                </td>
+            </tr>
             )}
         </tbody>
         </table>

@@ -4,37 +4,34 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-// Edit product component
-function EditProduct({ props }) {
+function AddProduct() {
 
     const API_URL = 'http://localhost:8000/api/';
 
     const [show, setShow] = useState(false);
     const [error, setError] = useState(false)
-    const [productId, setProductId] = useState(props.productId);
-    const [productName, setProductName] = useState(props.productName);
-    const [productOwnerName, setProductOwnerName] = useState(props.productOwnerName);
-    const [Developers, setDevelopers] = useState(props.Developers);
-    const [scrumMasterName, setScrumMasterName] = useState(props.scrumMasterName);
-    const [methodology, setMethodology] = useState(props.methodology);
-    const [startDate, setStartDate] = useState(props.startDate);
-    const[oldId, setOldId] = useState(props.productId);
+    const [productId, setProductId] = useState("");
+    const [productName, setProductName] = useState("");
+    const [productOwnerName, setProductOwnerName] = useState("");
+    const [Developers, setDevelopers] = useState("");
+    const [scrumMasterName, setScrumMasterName] = useState("");
+    const [methodology, setMethodology] = useState("");
+    const [startDate, setStartDate] = useState("");
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    async function updateProduct(product){
+    async function addProduct(product){
         
-        const response = await fetch(`${API_URL}product/${oldId}/`, {
+        const response = await fetch(`${API_URL}product/`, {
             
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(product)
         });
-        // handle the response
         if (response.status === 404 || response.status === 400 || response.status === 500){
-            alert('make sure product id is the same or does not exist ');
             console.log("Error")
             setError(true);
         }
@@ -44,48 +41,32 @@ function EditProduct({ props }) {
             handleClose();
         }
     }
-    // process the changes made to the variables before sending the PUT request
     const handleUpdate =(e) =>{
 
         e.preventDefault();
-        // if somethign is left empty
+        
         if (productId === '' || productName === '' || productOwnerName === '' || Developers === '' || scrumMasterName === '' || methodology === ''){
             alert('Please fill out every field');
             setError(true);
         }
         else{
-            // pass each variable to the updateProduct function
             e.preventDefault();
-            updateProduct({
+            addProduct({
                 "productId": parseInt(productId),
                 "productName": productName,
                 "productOwnerName": productOwnerName,
-                "Developers": Developers.toString().split(','),
+                "Developers": Developers.split(','),
                 "scrumMasterName": scrumMasterName,
                 "startDate": startDate,
                 "methodology": methodology   
             });
         }
+        
     };
-    // delete product
-    function deleteHandler(){
-        fetch(`${API_URL}product/${productId}/`, {
-          method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          handleClose();
-         
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      }
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Edit
+      <Button variant="primary" onClick={handleShow} className="btn btn-success btn-sm">
+        Add
       </Button>
 
       <Modal
@@ -129,8 +110,14 @@ function EditProduct({ props }) {
                 <Form.Control type="text" placeholder="Scrum" defaultValue={scrumMasterName} onChange = {(e) => {setScrumMasterName(e.target.value)}}/>
             </FloatingLabel>
 
+            <FloatingLabel controlId="floatingInput" label="Start Date" className = "mb-2">
+                <Form.Control type="text" placeholder="startDate" defaultValue={startDate} onChange = {(e) => {setStartDate(e.target.value)}}/>
+            </FloatingLabel>
+
+
             <FloatingLabel controlId ="floatingSelect" label = "Methodology">
                 <Form.Select aria-label="Floating label select example" defaultValue={methodology} onChange = {(e) => {setMethodology(e.target.value)}}>
+                    <option value = "">Choose...</option>
                     <option value= "Agile">Agile</option>
                     <option value = "Waterfall">Waterfall</option>
                 </Form.Select>
@@ -142,12 +129,11 @@ function EditProduct({ props }) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick = {handleUpdate}>Save</Button>
-          <Button variant="danger" onClick = {deleteHandler}>Delete</Button>
+          <Button variant="primary" onClick = {handleUpdate}>Add</Button>
         </Modal.Footer>
       </Modal>
     </>
   );
 }
 
-export default EditProduct;
+export default AddProduct;
