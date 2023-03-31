@@ -41,6 +41,7 @@ function EditProduct({ props }) {
         else{
             const data = await response.json();
             console.log('Success:', data);
+            
             handleClose();
         }
     }
@@ -65,6 +66,7 @@ function EditProduct({ props }) {
                 "startDate": startDate,
                 "methodology": methodology   
             });
+            location.reload();
         }
     };
     // delete product
@@ -75,6 +77,7 @@ function EditProduct({ props }) {
         .then(response => response.json())
         .then(data => {
           console.log('Success:', data);
+          location.reload();
           handleClose();
          
         })

@@ -76,7 +76,7 @@ function AddProduct() {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Product</Modal.Title>
+          <Modal.Title>Add new product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form>

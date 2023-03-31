@@ -44,18 +44,19 @@ function App() {
         alert("Product ID already exist");
         setError(true);
     }
+    // response is good, reload the page to show the new product
     else{
         const data = await response.json();
         console.log('Success:', data);
         handleClose();
-        initalsearchProducts('');
+        location.reload();
     }
 }
 // process the changes made to the variables before sending the POST request
 const handleUpdate =(e) =>{
 
     e.preventDefault();
-    
+    // if any of the fields are empty, alert the user 
     if (productId === '' || productName === '' || productOwnerName === '' || Developers === '' || scrumMasterName === '' || methodology === ''){
         alert('Please make sure all fields are filled out');
         setError(true);
@@ -146,7 +147,7 @@ const handleUpdate =(e) =>{
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Product</Modal.Title>
+          <Modal.Title>Add new Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form>

@@ -33,7 +33,7 @@ function ProductTable({ productData }){
                 <td>{product.methodology}</td>
                 <td>
                     <div>
-                    <EditProduct props = {product}/>
+                        <EditProduct props = {product}/>
                     </div>
                 </td>
             </tr>
