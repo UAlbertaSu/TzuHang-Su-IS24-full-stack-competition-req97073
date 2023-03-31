@@ -1,8 +1,12 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import 'bootstrap/dist/css/bootstrap.css';
-function ProductTable({ product }){
+import EditProduct from './EditProduct.jsx';
 
+import Modal from './EditProduct.jsx'
+
+function ProductTable({ productData }){
+ 
+    
     return (
         <table className="table table-bordered">
         <thead>
@@ -14,19 +18,23 @@ function ProductTable({ product }){
             <th scope="col">Scrum Master</th>
             <th scope="col">Start Date</th>
             <th scope="col">Methodology</th>
-            
+            <th scope="col"></th>
             </tr>
         </thead>
+
         <tbody>
-            <tr>
-            <th scope="row">{product.productId}</th>
-            <td>{product.productName}</td>
-            <td>{product.productOwnerName}</td>
-            <td>{product.Developers.slice(0, 5? 5: product.Developers.length).join(" ")}</td>
-            <td>{product.scrumMasterName}</td>
-            <td>{product.startDate}</td>
-            <td>{product.methodology}</td>
-            </tr>
+            {productData.map((product) =>
+                <tr key = {product.productId}>
+                <th scope="row">{product.productId}</th>
+                <td>{product.productName}</td>
+                <td>{product.productOwnerName}</td>
+                <td>{product.Developers.slice(0, 5? 5: product.Developers.length).join(" ")}</td>
+                <td>{product.scrumMasterName}</td>
+                <td>{product.startDate}</td>
+                <td>{product.methodology}</td>
+                <td><EditProduct props = {product}/></td>
+                </tr>
+            )}
         </tbody>
         </table>
 

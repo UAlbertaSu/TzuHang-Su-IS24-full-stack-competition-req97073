@@ -72,29 +72,22 @@ function App() {
         value ={searchTerm}
         onChange = {(e) => setSearchTerm(e.target.value)}
       />
-      <button 
+      <Button 
         type="button" 
         className="btn btn-primary btn-sm" 
         onClick ={() => searchProducts(searchTerm)}
         >
           Search
-        </button>
-        <button type="button" class="btn btn-danger btn-sm"
+        </Button>
+        <Button type="button" className="btn btn-danger btn-sm"
         onClick ={() => {deleteHandler(searchTerm)}}
         >
           delete
-        </button>
-        <button type="button" class="btn btn-warning btn-sm" 
-          onClick={() => {editHandler(searchTerm)}}
-        >
-          Edit
-        </button>
+        </Button>
         {productData.length > 0 
           ? (
             <div>
-              {productData.map((product) => (
-                <ProductTable product = {product} key = {[product.productId]}/>
-              ))}
+              <ProductTable productData = {productData}/>
             </div>
         ) : (
           <div>No Products Found</div> )

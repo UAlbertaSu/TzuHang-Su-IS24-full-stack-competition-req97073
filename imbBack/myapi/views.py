@@ -89,8 +89,7 @@ class ProductViewSet(viewsets.ViewSet):
         
         with open('data.json', "r+") as f:
             data = json.load(f)
-            if type(pk) != int:
-                return Response("Error: Only update product based on product numbers.", status = status.HTTP_400_BAD_REQUEST)
+            
             productId = int(pk)
             listofIds = []
             # get all the product IDs
