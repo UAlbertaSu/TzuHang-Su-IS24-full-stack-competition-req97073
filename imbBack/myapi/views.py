@@ -50,21 +50,27 @@ class ProductViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk):
         #saves all the products that match the query
         productList = []
+       
         with open('data.json') as f:
             reqData = json.load(f)
             #save the query
             query = pk
+            
             # check if query is a productID 
             for i in range(len(reqData)):
-                if query in str(reqData[i]["productId"]):
+                
+                if query == str(reqData[i]["productId"]):
+                    print(i)
                     productList.append(reqData[i])
                     #if match, break and return the product
-                    break
+                    return Response(productList, status = status.HTTP_200_OK)
+                
                 # if query wants to search by developer or scrum master
-                if query in reqData[i]["Developers"]:
+                elif query == reqData[i]["Developers"]:
                     productList.append(reqData[i])
-                if query in reqData[i]["scrumMasterName"]:
+                elif query == reqData[i]["scrumMasterName"]:
                     productList.append(reqData[i])
+           
             if productList:    
                 return Response(productList, status = status.HTTP_200_OK)
             # no matches
