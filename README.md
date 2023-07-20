@@ -1,5 +1,7 @@
 # TzuHang-Su-IS24-full-stack-competition-req97073
 
+[Screencast of how system works](https://www.youtube.com/watch?v=PyZk1vaOZ6I&ab_channel=stevesu)
+
 * Tech stack: Django Rest framework backend and react.js using vite@latest frontend
 
 * requirements: 
